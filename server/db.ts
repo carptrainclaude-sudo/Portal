@@ -147,6 +147,16 @@ CREATE TABLE IF NOT EXISTS transport_requests (
   submitted_at TEXT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS ix_transport_customer ON transport_requests(customer_email);
+-- Тестова пошта: копія кожного листа (на хостингу без SMTP — єдиний спосіб їх побачити).
+CREATE TABLE IF NOT EXISTS mail_outbox (
+  id INTEGER PRIMARY KEY,
+  to_email TEXT NOT NULL,
+  subject TEXT NOT NULL,
+  body TEXT NOT NULL,
+  link_path TEXT,
+  created_at TEXT NOT NULL,
+  delivered INTEGER NOT NULL DEFAULT 1
+);
 CREATE TABLE IF NOT EXISTS transport_events (
   id INTEGER PRIMARY KEY,
   request_id INTEGER NOT NULL REFERENCES transport_requests(id) ON DELETE CASCADE,

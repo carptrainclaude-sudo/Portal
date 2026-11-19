@@ -1,0 +1,20 @@
+# Render Blueprint для порталу (тестове середовище).
+# Для вже створеного Web Service ті самі значення задаються в Settings → Build & Deploy та Environment.
+services:
+  - type: web
+    name: portal
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: TZ
+        value: Europe/Kyiv          # дати «не в минулому» та місяці поставки — за київським часом
+      - key: MAIL_MODE
+        value: outbox               # листи не надсилаються, а показуються на сторінці «Тестова пошта»
+      - key: COOKIE_SECRET
+        generateValue: true

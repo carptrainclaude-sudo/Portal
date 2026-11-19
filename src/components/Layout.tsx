@@ -79,11 +79,15 @@ export default function Layout({ children }: { children: ReactNode }) {
           <span className="env-badge">ТЕСТ</span>
         </NavLink>
         <div className="topbar-right">
-          {meta?.mailpitUrl && (
+          {meta?.mailpitUrl && (meta.mailpitUrl.startsWith('/') ? (
+            <NavLink className="btn btn-subtle" to={meta.mailpitUrl} title="Листи, які надіслав портал (тестове середовище)">
+              <Icon name="mail" /> <span className="hide-sm">Тестова пошта</span>
+            </NavLink>
+          ) : (
             <a className="btn btn-subtle" href={meta.mailpitUrl} target="_blank" rel="noreferrer" title="Тестова поштова скринька (Mailpit)">
               <Icon name="mail" /> <span className="hide-sm">Mailpit</span>
             </a>
-          )}
+          ))}
           <UserSwitcher />
         </div>
       </header>

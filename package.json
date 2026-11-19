@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MVP порталу заявок на закупівлю (тестове середовище)",
+  "description": "Портал заявок: закупівлі та перевезення (MVP, тестове середовище)",
   "scripts": {
     "start": "node scripts/start.mjs",
+    "start:prod": "node --no-warnings scripts/prod.mjs",
     "build": "vite build",
     "dictionaries": "node scripts/build-dictionaries.mjs",
     "seed": "node --no-warnings server/seed.ts",

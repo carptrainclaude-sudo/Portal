@@ -16,6 +16,7 @@ import TransportHomePage from './pages/TransportHomePage';
 import TransportFormPage from './pages/TransportFormPage';
 import TransportPage from './pages/TransportPage';
 import DispatchPage from './pages/DispatchPage';
+import MailPage from './pages/MailPage';
 
 function Protected({ role, children }: { role?: Role | Role[]; children: React.ReactNode }) {
   const { user, loading, meta } = useApp();
@@ -52,6 +53,7 @@ function App() {
       <Route path="/transport/:id/edit" element={<Protected role="customer"><TransportFormPage /></Protected>} />
       <Route path="/transport/:id" element={<Protected role={['customer', 'dispatcher']}><TransportPage /></Protected>} />
       <Route path="/dispatch" element={<Protected role="dispatcher"><DispatchPage /></Protected>} />
+      <Route path="/mail" element={<Protected><MailPage /></Protected>} />
       <Route path="*" element={<Protected><div className="empty">Сторінку не знайдено</div></Protected>} />
     </Routes>
   );

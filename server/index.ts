@@ -12,17 +12,23 @@ import {
   createTransport, updateTransport, cancelTransport, takeTransport, reworkTransport, setCar, markLoaded, completeTransport,
   listMyTransport, listAllTransport, newTransportCount, getTransport,
 } from './transport.ts';
-import { sendNotice, APP_URL, type Notice } from './mail.ts';
+import { sendNotice, listOutbox, APP_URL, MAIL_MODE, type Notice } from './mail.ts';
 import { buildPdf, buildXlsx } from './export.ts';
 import { ITEM_STATUS, UNITS, monthLabel, monthOptions } from '../shared/constants.ts';
 
+// Локально — 127.0.0.1:3000; на хостингу (Render задає PORT і RENDER) — 0.0.0.0:$PORT.
 const PORT = Number(process.env.PORT ?? 3000);
-const MAILPIT_URL = process.env.MAILPIT_URL ?? 'http://localhost:8025';
+const HOST = process.env.HOST ?? (process.env.RENDER ? '0.0.0.0' : '127.0.0.1');
+// Посилання «Тестова пошта»: Mailpit локально, вбудована сторінка /mail на хостингу.
+const MAILPIT_URL = process.env.MAILPIT_URL ?? (MAIL_MODE === 'smtp' ? 'http://localhost:8025' : '/mail');
 const COOKIE = 'portal_user';
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '1mb' }));
-app.use(cookieParser('test-env-only-secret'));
+app.use(cookieParser(process.env.COOKIE_SECRET ?? 'test-env-only-secret'));
+
+app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
 declare global {
   namespace Express {
@@ -106,6 +112,12 @@ app.get('/api/profile', (req, res) => {
     u.email,
   );
   res.json(p ?? null);
+});
+
+// Тестова пошта (вбудована заміна Mailpit): усі листи, які надіслав портал.
+app.get('/api/mail', (req, res) => {
+  auth(req);
+  res.json(listOutbox());
 });
 
 app.get('/api/counters', (req, res) => {
@@ -235,7 +247,7 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   res.status(status).json({ error: status === 500 ? 'Внутрішня помилка сервера' : err.message });
 });
 
-app.listen(PORT, '127.0.0.1', () => {
-  console.log(`\n  Портал закупівель:  ${APP_URL}`);
-  console.log(`  Mailpit (листи):    ${MAILPIT_URL}\n`);
+app.listen(PORT, HOST, () => {
+  console.log(`\n  Портал закупівель:  ${APP_URL}  (слухає ${HOST}:${PORT})`);
+  console.log(`  Тестова пошта:      ${MAILPIT_URL.startsWith('/') ? APP_URL + MAILPIT_URL : MAILPIT_URL}\n`);
 });

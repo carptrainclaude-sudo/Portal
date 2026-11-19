@@ -347,6 +347,16 @@ textarea.input { height: auto; padding: 8px 10px; resize: vertical; }
 .st-IN_TRANSIT { color: #206a83; background: #e7f9ff; }
 .st-DONE { color: #216e4e; background: #dcfff1; }
 
+/* ---- Тестова пошта ---- */
+.mail-list { border: 1px solid var(--border); border-radius: var(--radius); margin-top: 12px; }
+.mail-item { border-bottom: 1px solid var(--border); }
+.mail-item:last-child { border-bottom: 0; }
+.mail-head { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%; padding: 10px 14px; background: none; border: 0; text-align: left; cursor: pointer; font: inherit; color: var(--text); }
+.mail-head:hover, .mail-item.is-open .mail-head { background: var(--bg-hover); }
+.mail-subject { font-weight: 600; }
+.mail-body { padding: 4px 14px 14px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.mail-text { white-space: pre-wrap; background: var(--bg-sunken); border-radius: 4px; padding: 10px 12px; width: 100%; }
+
 /* ---- Нові позиції, сповіщення, перевезення ---- */
 .lozenge-red { background: #ffeceb; color: #ae2e24; }
 .lozenge-orange { background: #fff3eb; color: #a54800; }
